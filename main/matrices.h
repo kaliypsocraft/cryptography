@@ -7,7 +7,7 @@
 class Matrix {
     public:
         Matrix(int, int);
-        Matrix(std::vector<std::vector<int>>, int, int);
+        Matrix(std::vector<std::vector<double>>, int, int);
         
         /*
         * pre-condition A and B both have n rows and m columns
@@ -29,7 +29,7 @@ class Matrix {
     private:
         int rows_;
         int columns_;
-        std::vector<std::vector<int>> M;
+        std::vector<std::vector<double>> M;
 };
 
 #endif 

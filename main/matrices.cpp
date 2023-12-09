@@ -7,6 +7,7 @@
 #include <math.h>
 #include <random>
 #include <bitset>
+#include <iomanip>
 #include <cstdlib>
 #include "matrices.h"
 
@@ -15,7 +16,7 @@ using namespace std;
 // Constructor
 // Initialise an empty matrix;
 Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
-   this->M.resize(rows, vector<int> (columns,0));
+   this->M.resize(rows, vector<double>(columns,0));
    for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             this->M[i][j] = 0;
@@ -25,7 +26,8 @@ Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
 
 // Constructor
 // Intialise a pre-determined matrix
-Matrix::Matrix(vector<vector<int>> A, int rows, int columns) : rows_(rows), columns_(columns) {
+Matrix::Matrix(vector<vector<double>> A, int rows, int columns) : rows_(rows), columns_(columns) {
+   this->M.resize(rows, vector<double>(columns,0));
    for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < columns_; j++) {
             this->M[i][j] = A[i][j];
@@ -33,12 +35,14 @@ Matrix::Matrix(vector<vector<int>> A, int rows, int columns) : rows_(rows), colu
     }
 }
 void Matrix::printMatrix() {
+     cout << "-------------------------------" << endl;
      for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            cout << this->M[i][j] << " ";
+            cout << setw(8) << this->M[i][j];
         }
         cout <<  endl;
     }
+    cout << "-------------------------------" << endl;
 }
 
 /*
@@ -48,7 +52,7 @@ void Matrix::printMatrix() {
 Matrix Matrix::operator+(const Matrix& B) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
-        for (int j = 0; i < this->columns_; j++) {
+        for (int j = 0; j < this->columns_; j++) {
             result.M[i][j] = this->M[i][j] + B.M[i][j];
         }
     }
@@ -58,7 +62,11 @@ Matrix Matrix::operator+(const Matrix& B) {
 // TODO:
 Matrix Matrix::operator-(const Matrix& B) {
     Matrix result(this->rows_, this->columns_);
-    
+    for(int i = 0; i < this->rows_; i++) {
+        for (int j = 0; j < this->columns_; j++) {
+            result.M[i][j] = this->M[i][j] - B.M[i][j];
+        }
+    }
     return result;
 } 
 
@@ -73,13 +81,21 @@ Matrix Matrix::operator*(const Matrix& B) {
 // TODO:
 Matrix Matrix::operator*(double lambda) {
     Matrix result(this->rows_, this->columns_);
-    
+    for(int i = 0; i < this->rows_; i++) {
+        for (int j = 0; j < this->columns_; j++) {
+            result.M[i][j] = this->M[i][j] * lambda;
+        }
+    }
     return result;
 } 
 
 // TODO:
 Matrix Matrix::operator/(double lambda) {
     Matrix result(this->rows_, this->columns_);
-    
+    for(int i = 0; i < this->rows_; i++) {
+        for (int j = 0; j < this->columns_; j++) {
+            result.M[i][j] = (double)(this->M[i][j] / lambda);
+        }
+    }
     return result;
 } 
