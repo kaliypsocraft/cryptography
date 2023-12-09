@@ -39,6 +39,7 @@ string removeSpaces(string message) {
 
 vector<int> xorCipher(string message) {
     vector<int> cipherText;
+    message = removeSpaces(message);
     generateKey(message.length());
     for (int i = 0; i < message.length(); i++) {
         cipherText.push_back((key[i] ^ message[i]) % ASCII_BOUND);
@@ -48,7 +49,7 @@ vector<int> xorCipher(string message) {
 }
 void decipher(vector<int> cipher) {
     vector<int> plainText;
-
+    cout << "Deciphered: ";
     for (int i = 0; i < cipher.size(); i++) {
         plainText.push_back((key[i] ^ cipher[i]) % ASCII_BOUND);
     }

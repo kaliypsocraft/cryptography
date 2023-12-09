@@ -4,7 +4,11 @@
 using namespace std;
 
 int main() {
-    vector<int> cipher = xorCipher("hello!!");
+    string message;
+    cout << "Enter the intended message: ";
+    getline(cin, message);
+    vector<int> cipher = xorCipher(message);
+    cout << "Enciphered: ";
     for (const auto& elem : cipher) {
         cout << char(elem % 127); 
     }
