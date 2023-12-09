@@ -34,10 +34,11 @@ Matrix::Matrix(vector<vector<double>> A, int rows, int columns) : rows_(rows), c
         }
     }
 }
+// Prints matrix out 
 void Matrix::printMatrix() {
      cout << "-------------------------------" << endl;
-     for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+     for (int i = 0; i < rows_; i++) {
+        for (int j = 0; j < columns_; j++) {
             cout << setw(8) << this->M[i][j];
         }
         cout <<  endl;
@@ -59,7 +60,7 @@ Matrix Matrix::operator+(const Matrix& B) {
     return result;
 } 
 
-// TODO:
+// Subtraction operation
 Matrix Matrix::operator-(const Matrix& B) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
@@ -71,14 +72,22 @@ Matrix Matrix::operator-(const Matrix& B) {
 } 
 
 
-// TODO:
+// Matrix multiplication
+// Pre-condition for A.B
 Matrix Matrix::operator*(const Matrix& B) {
-    Matrix result(this->rows_, this->columns_);
-    
+    // As a 3x3 . 3x1 matrix turns into a 3x1 matrix
+    Matrix result(this->rows_, B.columns_);
+     for(int i = 0; i < this->rows_; i++) {
+        for (int j = 0; j < B.columns_; j++) {
+           for (int k = 0; k < this->columns_; k++) {
+                    result.M[i][j] += this->M[i][k] * B.M[k][j];
+                } 
+        }
+    }
     return result;
 } 
 
-// TODO:
+// Scalar multiplication
 Matrix Matrix::operator*(double lambda) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
@@ -89,7 +98,7 @@ Matrix Matrix::operator*(double lambda) {
     return result;
 } 
 
-// TODO:
+// Division
 Matrix Matrix::operator/(double lambda) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {

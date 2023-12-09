@@ -7,13 +7,12 @@ using namespace std;
 int main() {
     Matrix m(3, 3);
     vector<vector<double>> test = {{1,2,3}, {4,5,6}, {7,8,9}};
+    vector<vector<double>> test1 = {{1}, {1}, {1}}; // Essentially a 3D Vector with x,y,z coordinates
     Matrix b(test, 3, 3);
+    Matrix b1(test1, 3, 1);
 
-    double scale = 2.0;
-    Matrix sum = b - m;
-    Matrix scaled = sum * scale;
+    Matrix scaled = b * b1;
     scaled.printMatrix();
-    Matrix reduced = scaled / 4.0;
-    reduced.printMatrix();
+   
     return 0;
 }
