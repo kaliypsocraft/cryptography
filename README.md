@@ -5,7 +5,8 @@ This project provides elementary tools in the world of cryptography. It provides
 - [Features](#Features)
 
 ## Features
-- Classical Ciphers
-    - Transposition Cipher
-    - XOR Ciphers
+- Classical Ciphers    
+- XOR Ciphers
 - Basic Matrix Operations
+    - Addition/Substraction
+    - Scalar Multiplication
