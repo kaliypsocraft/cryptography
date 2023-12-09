@@ -11,6 +11,7 @@
 #include "matrices.h"
 
 using namespace std;
+
 // Constructor
 // Initialise an empty matrix;
 Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
@@ -21,6 +22,9 @@ Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
         }
     }
 }
+
+// Constructor
+// Intialise a pre-determined matrix
 Matrix::Matrix(vector<vector<int>> A, int rows, int columns) : rows_(rows), columns_(columns) {
    for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < columns_; j++) {
@@ -48,5 +52,34 @@ Matrix Matrix::operator+(const Matrix& B) {
             result.M[i][j] = this->M[i][j] + B.M[i][j];
         }
     }
+    return result;
+} 
+
+// TODO:
+Matrix Matrix::operator-(const Matrix& B) {
+    Matrix result(this->rows_, this->columns_);
+    
+    return result;
+} 
+
+
+// TODO:
+Matrix Matrix::operator*(const Matrix& B) {
+    Matrix result(this->rows_, this->columns_);
+    
+    return result;
+} 
+
+// TODO:
+Matrix Matrix::operator*(double lambda) {
+    Matrix result(this->rows_, this->columns_);
+    
+    return result;
+} 
+
+// TODO:
+Matrix Matrix::operator/(double lambda) {
+    Matrix result(this->rows_, this->columns_);
+    
     return result;
 } 
