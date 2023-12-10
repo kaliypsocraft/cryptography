@@ -13,8 +13,9 @@
 
 using namespace std;
 
-// Constructor
-// Initialise an empty matrix;
+/// @brief  Constructs a n x m matrix
+/// @param rows 
+/// @param columns 
 Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
    this->M.resize(rows, vector<double>(columns,0));
    for (int i = 0; i < rows; i++) {
@@ -24,8 +25,21 @@ Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
     }
 }
 
-// Constructor
-// Intialise a pre-determined matrix
+/// @brief Constructs a square matrix of length n
+/// @param size 
+Matrix::Matrix(int size) : rows_(size), columns_(size) {
+   this->M.resize(size, vector<double>(size,0));
+   for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            this->M[i][j] = 0;
+        }
+    }
+}
+
+/// @brief Creates an n x m matrix with pre-determined values
+/// @param A 
+/// @param rows 
+/// @param columns 
 Matrix::Matrix(vector<vector<double>> A, int rows, int columns) : rows_(rows), columns_(columns) {
    this->M.resize(rows, vector<double>(columns,0));
    for (int i = 0; i < rows_; i++) {
@@ -34,22 +48,23 @@ Matrix::Matrix(vector<vector<double>> A, int rows, int columns) : rows_(rows), c
         }
     }
 }
-// Prints matrix out 
+
+/// @brief Prints out the contents of a matrix
 void Matrix::printMatrix() {
-     cout << "-------------------------------" << endl;
+     cout << "--------------------------------------------------------------" << endl;
      for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < columns_; j++) {
             cout << setw(8) << this->M[i][j];
         }
-        cout <<  endl;
+        cout << endl;
     }
-    cout << "-------------------------------" << endl;
+    cout << "--------------------------------------------------------------" << endl;
 }
 
-/*
-* pre-condition A and B both have n rows and m columns
-*
-*/
+
+/// @brief 
+/// @param B 
+/// @return 
 Matrix Matrix::operator+(const Matrix& B) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
@@ -60,7 +75,22 @@ Matrix Matrix::operator+(const Matrix& B) {
     return result;
 } 
 
-// Subtraction operation
+/// @brief 
+/// @param B 
+/// @return 
+Matrix Matrix::operator%(double modulus) {
+    Matrix result(this->rows_, this->columns_);
+    for(int i = 0; i < this->rows_; i++) {
+        for (int j = 0; j < this->columns_; j++) {
+            result.M[i][j] = (int)this->M[i][j] % (int)modulus;
+        }
+    }
+    return result;
+} 
+
+/// @brief 
+/// @param B 
+/// @return 
 Matrix Matrix::operator-(const Matrix& B) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
@@ -72,8 +102,9 @@ Matrix Matrix::operator-(const Matrix& B) {
 } 
 
 
-// Matrix multiplication
-// Pre-condition for A.B
+/// @brief 
+/// @param B 
+/// @return 
 Matrix Matrix::operator*(const Matrix& B) {
     // As a 3x3 . 3x1 matrix turns into a 3x1 matrix
     Matrix result(this->rows_, B.columns_);
@@ -86,8 +117,9 @@ Matrix Matrix::operator*(const Matrix& B) {
     }
     return result;
 } 
-
-// Scalar multiplication
+ /// @brief 
+ /// @param 
+ /// @return 
 Matrix Matrix::operator*(double lambda) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
@@ -98,7 +130,9 @@ Matrix Matrix::operator*(double lambda) {
     return result;
 } 
 
-// Division
+/// @brief 
+/// @param lambda 
+/// @return 
 Matrix Matrix::operator/(double lambda) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
@@ -108,3 +142,31 @@ Matrix Matrix::operator/(double lambda) {
     }
     return result;
 } 
+
+/// @brief Creates an identity matrix with the pre-condition that rows and columns are equal
+/// @param rows 
+/// @param columns 
+/// @return An n x n identity matrix
+Matrix Matrix::createIdentity(int size) {
+    Matrix I(size);
+    for (int i = 0; i < I.rows_; i++) {
+        for (int j = 0; j < I.columns_; j++) {
+            if (i == j) {
+                I.M[i][j] = 1;
+            } else {
+                I.M[i][j] = 0;
+            }
+        }
+    }
+    return I;
+}
+
+/// @brief Assuming A has more columns than b and their rows are of equal length
+/// @param A 
+/// @param b 
+/// @return 
+Matrix Matrix::augment(const Matrix& A, const Matrix& b) {
+    Matrix augmented(A.rows_, A.columns_ + b.columns_);
+
+    return augmented;
+}

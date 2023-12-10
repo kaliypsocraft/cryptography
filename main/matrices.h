@@ -7,7 +7,9 @@
 class Matrix {
     public:
         Matrix(int, int);
+        Matrix(int);
         Matrix(std::vector<std::vector<double>>, int, int);
+
         
         /*
         * pre-condition A and B both have n rows and m columns
@@ -23,8 +25,16 @@ class Matrix {
         Matrix operator*(const Matrix&);
         Matrix operator*(double);
         Matrix operator/(double);
-        
+
+        Matrix operator%(double modulus);
+
+        /*
+        * Utility functions
+        */ 
+        Matrix augment(const Matrix&, const Matrix&);
         void printMatrix();
+        Matrix transpose(const Matrix&);
+        static Matrix createIdentity(int);
     
     private:
         int rows_;
