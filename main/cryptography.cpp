@@ -3,6 +3,7 @@
 #include <gmp.h>
 #include "constants.h"
 #include <gmpxx.h>
+#include <string>
 #include <vector>
 #include <math.h>
 #include <random>
@@ -26,6 +27,7 @@ vector<int> generateKey(int length) {
     }
     return key;
 }
+
 string removeSpaces(string message) {
     string formatted = "";
     for (const auto& c : message) {
@@ -36,8 +38,10 @@ string removeSpaces(string message) {
     return formatted;
 }
 
-
-vector<int> xorCipher(string message) {
+/// @brief 
+/// @param message 
+/// @return 
+vector<int> xorCipher(string& message) {
     vector<int> cipherText;
     message = removeSpaces(message);
     generateKey(message.length());
@@ -47,6 +51,7 @@ vector<int> xorCipher(string message) {
     decipher(cipherText);
     return cipherText;
 }
+
 void decipher(vector<int> cipher) {
     vector<int> plainText;
     cout << "Deciphered: ";
@@ -58,3 +63,28 @@ void decipher(vector<int> cipher) {
     }
     cout << endl;
 }
+
+/// TODO: 
+string autoCipher() {}
+
+/// TODO:
+/// @param message 
+/// @return 
+string ROT13(const string& message) {
+    string deciphered = "";
+    int index = 0;
+    for (const auto& elem : message) {
+        char c = toupper(elem);
+        cout << elem << '\n';
+        deciphered += c;
+    }
+    return deciphered;
+}
+string generateKey() {
+
+}
+string columnarCipher(const string& plainText) {
+    
+}
+
+

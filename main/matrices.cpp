@@ -13,11 +13,13 @@
 
 using namespace std;
 
+
 /// @brief  Constructs a n x m matrix
 /// @param rows 
 /// @param columns 
-Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
-   this->M.resize(rows, vector<double>(columns,0));
+template <typename T>
+Matrix<T>::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
+   this->M.resize(rows, vector<T>(columns,0));
    for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             this->M[i][j] = 0;
@@ -27,8 +29,9 @@ Matrix::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
 
 /// @brief Constructs a square matrix of length n
 /// @param size 
-Matrix::Matrix(int size) : rows_(size), columns_(size) {
-   this->M.resize(size, vector<double>(size,0));
+template <typename T>
+Matrix<T>::Matrix(int size) : rows_(size), columns_(size) {
+   this->M.resize(size, vector<T>(size,0));
    for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             this->M[i][j] = 0;
@@ -40,8 +43,9 @@ Matrix::Matrix(int size) : rows_(size), columns_(size) {
 /// @param A 
 /// @param rows 
 /// @param columns 
-Matrix::Matrix(vector<vector<double>> A, int rows, int columns) : rows_(rows), columns_(columns) {
-   this->M.resize(rows, vector<double>(columns,0));
+template <typename T>
+Matrix<T>::Matrix(vector<vector<T>> A, int rows, int columns) : rows_(rows), columns_(columns) {
+   this->M.resize(rows, vector<T>(columns,0));
    for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < columns_; j++) {
             this->M[i][j] = A[i][j];
@@ -49,8 +53,9 @@ Matrix::Matrix(vector<vector<double>> A, int rows, int columns) : rows_(rows), c
     }
 }
 
+template <typename T>
 /// @brief Prints out the contents of a matrix
-void Matrix::printMatrix() {
+void Matrix<T>::printMatrix() {
      cout << "--------------------------------------------------------------" << endl;
      for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < columns_; j++) {
@@ -65,7 +70,8 @@ void Matrix::printMatrix() {
 /// @brief 
 /// @param B 
 /// @return 
-Matrix Matrix::operator+(const Matrix& B) {
+template <typename T>
+Matrix<T> Matrix<T>::operator+(const Matrix& B) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
         for (int j = 0; j < this->columns_; j++) {
@@ -78,7 +84,8 @@ Matrix Matrix::operator+(const Matrix& B) {
 /// @brief 
 /// @param B 
 /// @return 
-Matrix Matrix::operator%(double modulus) {
+template <typename T>
+Matrix<T> Matrix<T>::operator%(double modulus) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
         for (int j = 0; j < this->columns_; j++) {
@@ -91,7 +98,8 @@ Matrix Matrix::operator%(double modulus) {
 /// @brief 
 /// @param B 
 /// @return 
-Matrix Matrix::operator-(const Matrix& B) {
+template <typename T>
+Matrix<T> Matrix<T>::operator-(const Matrix& B) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
         for (int j = 0; j < this->columns_; j++) {
@@ -101,11 +109,11 @@ Matrix Matrix::operator-(const Matrix& B) {
     return result;
 } 
 
-
+template <typename T>
 /// @brief 
 /// @param B 
 /// @return 
-Matrix Matrix::operator*(const Matrix& B) {
+Matrix<T> Matrix<T>::operator*(const Matrix& B) {
     // As a 3x3 . 3x1 matrix turns into a 3x1 matrix
     Matrix result(this->rows_, B.columns_);
      for(int i = 0; i < this->rows_; i++) {
@@ -120,7 +128,8 @@ Matrix Matrix::operator*(const Matrix& B) {
  /// @brief 
  /// @param 
  /// @return 
-Matrix Matrix::operator*(double lambda) {
+template <typename T>
+Matrix<T> Matrix<T>::operator*(double lambda) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
         for (int j = 0; j < this->columns_; j++) {
@@ -133,7 +142,8 @@ Matrix Matrix::operator*(double lambda) {
 /// @brief 
 /// @param lambda 
 /// @return 
-Matrix Matrix::operator/(double lambda) {
+template <typename T>
+Matrix<T> Matrix<T>::operator/(double lambda) {
     Matrix result(this->rows_, this->columns_);
     for(int i = 0; i < this->rows_; i++) {
         for (int j = 0; j < this->columns_; j++) {
@@ -142,12 +152,12 @@ Matrix Matrix::operator/(double lambda) {
     }
     return result;
 } 
-
+template <typename T>
 /// @brief Creates an identity matrix with the pre-condition that rows and columns are equal
 /// @param rows 
 /// @param columns 
 /// @return An n x n identity matrix
-Matrix Matrix::createIdentity(int size) {
+Matrix<T> Matrix<T>::createIdentity(int size) {
     Matrix I(size);
     for (int i = 0; i < I.rows_; i++) {
         for (int j = 0; j < I.columns_; j++) {
@@ -165,8 +175,69 @@ Matrix Matrix::createIdentity(int size) {
 /// @param A 
 /// @param b 
 /// @return 
-Matrix Matrix::augment(const Matrix& A, const Matrix& b) {
+template <typename T>
+Matrix<T> Matrix<T>::augment(const Matrix& A, const Matrix& b) {
     Matrix augmented(A.rows_, A.columns_ + b.columns_);
 
     return augmented;
+}
+
+/// @brief Returns A transpose
+/// @param A 
+/// @return 
+template <typename T>
+Matrix<T> Matrix<T>::transpose() {
+    Matrix At(this->columns_, this->rows_);
+    for (int i = 0; i < this->columns_; i++) {
+        for (int j = 0; j < this->rows_; j++) {
+            At.M[i][j] = this->M[j][i];
+        }
+    }
+    return At;
+}
+// TODO: Requires adjugate 
+/// @brief 
+/// @return 
+template <typename T>
+Matrix<T> Matrix<T>::inverse() {
+    if (determinant(Matrix(this->M, this->rows_, this->columns_)) == 0) {
+        
+    }
+}
+/// @brief Returns the determinant
+/// @param A 
+/// @return 
+template <typename T>
+double Matrix<T>::determinant(const Matrix& A) {
+    if (A.rows_ == 2 && A.columns_ == 2) {
+        int a = A.M[0][0], b = A.M[0][1];
+        int c = A.M[1][0], d = A.M[1][1];
+        return (a * d) - (b * c);
+    } 
+    // Otherwise it is a 3 x 3
+    return (A.M[0][0] * determinant(getSubMatrix(0, A))) - (A.M[0][1] * determinant(getSubMatrix(1, A))) + (A.M[0][2] * determinant(getSubMatrix(2, A)));
+}
+
+/// @brief 
+/// @param col 
+/// @param subject 
+/// @return 
+template <typename T>
+Matrix<T> Matrix<T>::getSubMatrix(int col, const Matrix& subject) {
+    vector<vector<double>> subMatrix;
+    for (int i = 1; i < subject.rows_ ; i++) {
+        for(int j = 0; j < subject.columns_; j++) {
+            if (j != col) {
+                subMatrix[i][j] = subject.M[i][j];
+            }
+        }
+    }
+    return Matrix(subMatrix, 2, 2);
+}
+template <typename T>
+Matrix<T> Matrix<T>::getAdjugate() {
+    if (this->columns_ == 2 && this->rows_ == 2) {
+
+    }
+    return Matrix(2, 2);
 }

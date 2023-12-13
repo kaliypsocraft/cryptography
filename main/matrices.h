@@ -3,12 +3,15 @@
 
 
 #include <vector>
+#include <string>
 
+template <typename T>
 class Matrix {
     public:
         Matrix(int, int);
         Matrix(int);
-        Matrix(std::vector<std::vector<double>>, int, int);
+        Matrix(std::string, int, int);
+        Matrix(std::vector<std::vector<T>>, int, int);
 
         
         /*
@@ -33,13 +36,17 @@ class Matrix {
         */ 
         Matrix augment(const Matrix&, const Matrix&);
         void printMatrix();
-        Matrix transpose(const Matrix&);
+        Matrix transpose();
+        Matrix inverse();
+        double determinant(const Matrix&);
+        Matrix getSubMatrix(int, const Matrix&);
         static Matrix createIdentity(int);
+        Matrix getAdjugate();
     
     private:
         int rows_;
         int columns_;
-        std::vector<std::vector<double>> M;
+        std::vector<std::vector<T>> M;
 };
 
 #endif 
