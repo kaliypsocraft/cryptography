@@ -1,18 +1,52 @@
 #include <iostream>
 #include "cryptography.h"
+#include <gmp.h>
+#include "constants.h"
+#include <gmpxx.h>
+#include <vector>
+#include <string>
+#include <math.h>
+#include <random>
+#include <bitset>
+#include <iomanip>
 #include "matrices.h"
+#include "matrices.cpp"
+#include "string_util.h"
 
-using namespace std;
+using std::vector, std::cout, std::cin, std::find;
+
+string formatMessage(string s);
+vector<vector<char>> generateColumnar(string s, int rows, int cols);
+bool customOrder(char a, char b);
 
 int main() {
-    Matrix m(3, 3);
-    vector<vector<double>> test = {{1,2,3}, {4,5,6}, {7,8,9}};
-    vector<vector<double>> test1 = {{1}, {1}, {1}}; // Essentially a 3D Vector with x,y,z coordinates
-    Matrix b(test, 3, 3);
-    Matrix b1(test1, 3, 1);
+    
+    polyAlphabeticCipher test;
+    cout << test.encrypt("meetatthefountain") << '\n';
 
-    Matrix scaled = b * b1;
-    scaled.printMatrix();
-   
+    /*
+    string s = "";
+    cout << "Enter the message: " << '\n';
+    cin >> s;
+    s = formatMessage(s);
+    
+    vector<vector<char>> charTest = generateColumnar(s, (s.length() / 5), DEFAULT_KEY_LENGTH);
+    Matrix<char> plain (charTest, (s.length() / 5), DEFAULT_KEY_LENGTH);
+    plain.printMatrix();
+    plain.printColumnSpace();
+    */
+    
     return 0;
+}
+
+vector<vector<char>> generateColumnar(string s, int rows, int cols) {
+    vector<vector<char>> word;
+    word.resize(rows, vector<char>(cols, 0));
+    int index = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            word[i][j] = s[index++];
+        }
+    }
+    return word;
 }
