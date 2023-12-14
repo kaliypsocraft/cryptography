@@ -6,9 +6,26 @@
 using namespace std;
 // some declarations in
 // the header file
-vector<int> xorCipher(const string&);
-string ROT13(string&);
-string autoCipher();
-string columnarCipher(const string&);
-
+class xorCipher {
+    public:
+        vector<int> encrypt(const string&);
+        void decipher(vector<int> cipher);
+};
+class ROT13 {
+    public:
+        string encrypt(const string&);
+        string decrypt(const string&);
+};
+class polyAlphabeticCipher {
+    public:
+        string encrypt(const string&);
+        string decrypt(const string&);
+    private:
+        string formatKey(const string&, const string&);
+};
+class columnarCipher {
+    public:
+        string encrypt(const string&);
+        string decrypt(const string&);
+};
 #endif

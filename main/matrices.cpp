@@ -1,18 +1,16 @@
 #include <iostream>
 #include "cryptography.h"
-#include <gmp.h>
 #include "constants.h"
-#include <gmpxx.h>
 #include <vector>
-#include <math.h>
-#include <random>
+#include <string>
 #include <bitset>
 #include <iomanip>
 #include <cstdlib>
 #include "matrices.h"
+#include "string_util.h"
+
 
 using namespace std;
-
 
 /// @brief  Constructs a n x m matrix
 /// @param rows 
@@ -65,6 +63,34 @@ void Matrix<T>::printMatrix() {
     }
     cout << "--------------------------------------------------------------" << endl;
 }
+
+
+template <typename T>
+/// @brief Prints out the contents of a matrix
+void Matrix<T>::printColumnSpace() {
+    int length = 0;
+    string s = "";
+    cout << "--------------------------------------------------------------" << endl;
+    for (int i = 0; i < columns_; i++) {
+        for (int j = 0; j < rows_; j++) {
+            T elem = this->M[j][i];
+            if (elem != ' ') {
+                s += elem;
+            }
+        }
+    }
+    string result = "";
+    for (size_t i = 0; i < s.length(); i++) {
+        result += s[i];
+
+        // Insert a space every fifth letter
+        if ((i + 1) % DEFAULT_KEY_LENGTH == 0 && i != s.length() - 1) {
+            result += ' ';
+        }
+    }
+    cout << result << '\n';
+}
+
 
 
 /// @brief 
@@ -240,4 +266,19 @@ Matrix<T> Matrix<T>::getAdjugate() {
 
     }
     return Matrix(2, 2);
+}
+
+template <typename T>
+void Matrix<T>::swapColumn(int c1, int c2) {
+    for(int i = 0; i < this->M.size(); i++) {
+        swap(this->M[i][c1], this->M[i][c2]);
+    }
+
+}
+template <typename T>
+void Matrix<T>::swapRow(int r1, int r2) {
+    for(int j = 0; j < this->M[0].size(); j++) {
+        swap(this->M[r1][j], this->M[r2][j]);
+    }
+
 }

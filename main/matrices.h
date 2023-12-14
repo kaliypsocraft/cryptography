@@ -10,7 +10,6 @@ class Matrix {
     public:
         Matrix(int, int);
         Matrix(int);
-        Matrix(std::string, int, int);
         Matrix(std::vector<std::vector<T>>, int, int);
 
         
@@ -36,12 +35,21 @@ class Matrix {
         */ 
         Matrix augment(const Matrix&, const Matrix&);
         void printMatrix();
+        void printColumnSpace();
         Matrix transpose();
-        Matrix inverse();
         double determinant(const Matrix&);
         Matrix getSubMatrix(int, const Matrix&);
+
+        // Requires determinant and adjugate
+        Matrix inverse();
+
         static Matrix createIdentity(int);
         Matrix getAdjugate();
+
+        vector<T> extractColumn(int);
+
+        void swapColumn(int, int);
+        void swapRow(int, int);
     
     private:
         int rows_;
