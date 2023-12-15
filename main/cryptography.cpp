@@ -4,8 +4,10 @@
 #include "string_util.h"
 #include <unordered_map>
 #include <string>
+#include "matrices.h"
 #include <vector>
 #include <math.h>
+#include "sort.h"
 #include <algorithm>
 #include <random>
 #include <bitset>
@@ -84,7 +86,7 @@ string PolyAlphabeticCipher::encrypt(const string& message) {
 /// @param cipher 
 /// @return 
 string PolyAlphabeticCipher::decrypt(const string& cipher) {
-
+     return "TODO";
 }
 
 string PolyAlphabeticCipher::formatKey(const string& key, const string& plainText) {
@@ -127,26 +129,64 @@ string ROT13::decrypt(const string& cipher) {
 /// @param plainText 
 /// @return 
 string ColumnarCipher::encrypt(const string& plainText) {
+    int rowLength = ceil(plainText.length() / DEFAULT_KEY_LENGTH);
+    cout << plainText.length() << '\n';
+    cout << DEFAULT_KEY_LENGTH << '\n';
     vector<vector<char>> plainString = generateColumnar(plainText, 
-                                                        plainText.length() / DEFAULT_KEY_LENGTH,
+                                                        rowLength,
                                                         DEFAULT_KEY_LENGTH);
+    Matrix<char> generator(plainString, rowLength, DEFAULT_KEY_LENGTH);
+    generator.printMatrix();
+    generator.printColumnSpace();
+   
+    int ordering[RANDOM_KEY.length()];
+    getOrdering(ordering);
+    for (int i = 0; i < RANDOM_KEY.length(); i++) {
+        cout << ordering[i] << '\n';
+    }
     
+    return "TODO";
+}
+
+void ColumnarCipher::getOrdering(int* order) {
+
+    vector<char> sorted(RANDOM_KEY.begin(), RANDOM_KEY.end());
+    QuickSort<char> sorter;
+    sorter.sort(sorted, 0, sorted.size() - 1);
+    
+    for (const auto& elem : sorted) {
+        cout << elem << '\n';
+    }
+    for (int i = 0; i < RANDOM_KEY.length(); i++) {
+        for (int j = 0; j < sorted.size(); j++) {
+            if (RANDOM_KEY[i] == sorted[j]) {
+                order[i] = j;
+            }
+        }
+    }
 }
 
 /// @brief TODO:
 /// @param cipherText 
 /// @return 
 string ColumnarCipher::decrypt(const string& cipherText) {
-
+    return "TODO";
 }
 
+/// @brief 
+/// @param s 
+/// @param rows 
+/// @param vector 
+/// @return 
 vector<vector<char>> ColumnarCipher::generateColumnar(const string& s, int rows, int cols) {
     vector<vector<char>> word;
+    string message = removeSpaces(s);
+    message = formatMessage(message);
     word.resize(rows, vector<char>(cols, 0));
     int index = 0;
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            word[i][j] = s[index++];
+            word[i][j] = message[index++];
         }
     }
     return word;

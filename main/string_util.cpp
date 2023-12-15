@@ -35,7 +35,7 @@ bool customOrder(char a, char b) {
 /// @param s 
 /// @return 
 std::string formatMessage(std::string s) {
-    while (s.length() % DEFAULT_KEY_LENGTH != 0) {
+    while (s.length() % (int)DEFAULT_KEY_LENGTH != 0) {
         s += ' ';
     }
     return s;

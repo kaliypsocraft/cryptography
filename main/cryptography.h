@@ -27,6 +27,8 @@ class ColumnarCipher {
     public:
         string encrypt(const string&);
         string decrypt(const string&);
+    private:
         vector<vector<char>> generateColumnar(const string&, int, int);
+        void getOrdering(int*);
 };
 #endif

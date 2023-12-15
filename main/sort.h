@@ -16,6 +16,12 @@ class QuickSort {
 };
 
 template <typename T>
+class MergeSort {
+  public: 
+      void sort(vector<T>&, int, int);
+};
+
+template <typename T>
 void QuickSort<T>::sort(vector<T>& A, int lo, int hi) {
   if (lo >= hi) {
     return;

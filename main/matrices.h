@@ -137,7 +137,7 @@ void Matrix<T>::printColumnSpace() {
         result += s[i];
 
         // Insert a space every fifth letter
-        if ((i + 1) % DEFAULT_KEY_LENGTH == 0 && i != s.length() - 1) {
+        if ((i + 1) % (int)DEFAULT_KEY_LENGTH == 0 && i != s.length() - 1) {
             result += ' ';
         }
     }

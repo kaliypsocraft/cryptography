@@ -17,21 +17,8 @@
 using std::vector, std::cout, std::cin, std::find;
 
 int main() {
-
-    QuickSort<char> testing;
-    vector<char> test1 = {'D', 'G', 'A', 'L'};
-    cout << "Unsorted" << '\n';
-    for (const auto& elem : test1) {
-        cout << elem << " ";
-    }
-    cout << '\n';
-    testing.sort(test1, 0, test1.size() - 1);
-    cout << "Sorted" << '\n';
-    for (const auto& elem : test1) {
-        cout << elem << " ";
-    }
-    cout << '\n';
-   
+    ColumnarCipher test;
+    test.encrypt("THIS IS WIKIPEDIA");
     
     
     return 0;
