@@ -1,8 +1,8 @@
 #include <iostream>
 #include "cryptography.h"
-#include <gmp.h>
 #include "constants.h"
-#include <gmpxx.h>
+#include "string_util.h"
+#include <unordered_map>
 #include <string>
 #include <vector>
 #include <math.h>
@@ -25,19 +25,6 @@ bool isCharacter(int c) {
 }
 
 /// @brief 
-/// @param message 
-/// @return 
-string removeSpaces(string message) {
-    string formatted = "";
-    for (const auto& c : message) {
-        if (c != ' ') {
-            formatted += toupper(c);
-        }
-    }
-    return formatted;
-}
-
-/// @brief 
 /// @param length 
 /// @return 
 vector<int> generateKey(int length) {
@@ -53,7 +40,7 @@ vector<int> generateKey(int length) {
 /// @brief 
 /// @param message 
 /// @return 
-vector<int> xorCipher::encrypt(const string& message) {
+vector<int> XorCipher::encrypt(const string& message) {
     vector<int> cipherText;
     string modifiedMessage = removeSpaces(message);
     generateKey(modifiedMessage.length());
@@ -65,7 +52,7 @@ vector<int> xorCipher::encrypt(const string& message) {
 
 /// @brief 
 /// @param cipher 
-void xorCipher::decipher(vector<int> cipher) {
+void XorCipher::decrypt(vector<int> cipher) {
     vector<int> plainText;
     cout << "Deciphered: ";
     for (int i = 0; i < cipher.size(); i++) {
@@ -80,7 +67,7 @@ void xorCipher::decipher(vector<int> cipher) {
 /// @brief 
 /// @param message 
 /// @return 
-string polyAlphabeticCipher::encrypt(const string& message) {
+string PolyAlphabeticCipher::encrypt(const string& message) {
     string plainText = removeSpaces(message);
     string cipherText = "";
     string key = formatKey(RANDOM_KEY, plainText);
@@ -93,7 +80,14 @@ string polyAlphabeticCipher::encrypt(const string& message) {
     return cipherText;
 }
 
-string polyAlphabeticCipher::formatKey(const string& key, const string& plainText) {
+/// @brief TODO:
+/// @param cipher 
+/// @return 
+string PolyAlphabeticCipher::decrypt(const string& cipher) {
+
+}
+
+string PolyAlphabeticCipher::formatKey(const string& key, const string& plainText) {
     string formattedKey = key;
     int index = 0;
     while (formattedKey.size() < plainText.size()) {
@@ -121,10 +115,39 @@ string ROT13::encrypt(const string& message) {
     return deciphered;
 }
 
-/// @brief 
+/// @brief Since we rotate by 13 letters rotating twice gets us back to where we came from - in mod(26)
+/// @param cipher 
+/// @return 
+string ROT13::decrypt(const string& cipher) {
+    ROT13 temp;
+    return temp.encrypt(cipher);
+}
+
+/// @brief TODO:
 /// @param plainText 
 /// @return 
-string columnarCipher::encrypt(const string& plainText) {
+string ColumnarCipher::encrypt(const string& plainText) {
+    vector<vector<char>> plainString = generateColumnar(plainText, 
+                                                        plainText.length() / DEFAULT_KEY_LENGTH,
+                                                        DEFAULT_KEY_LENGTH);
+    
+}
+
+/// @brief TODO:
+/// @param cipherText 
+/// @return 
+string ColumnarCipher::decrypt(const string& cipherText) {
 
 }
 
+vector<vector<char>> ColumnarCipher::generateColumnar(const string& s, int rows, int cols) {
+    vector<vector<char>> word;
+    word.resize(rows, vector<char>(cols, 0));
+    int index = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            word[i][j] = s[index++];
+        }
+    }
+    return word;
+}
