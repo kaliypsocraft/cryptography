@@ -13,6 +13,7 @@ using namespace std;
 #include <cstdlib>
 #include "string_util.h"
 
+
 template <typename T>
 class Matrix {
     public:
@@ -42,6 +43,7 @@ class Matrix {
         * Utility functions
         */ 
         Matrix augment(const Matrix&, const Matrix&);
+        void insertColumn(int, T&);
         void printMatrix();
         void printColumnSpace();
         Matrix transpose();
@@ -60,6 +62,9 @@ class Matrix {
         void swapRow(int, int);
     
     private:
+        int currentRow = 0;
+        int previousColumn = 0;
+        
         int rows_;
         int columns_;
         std::vector<std::vector<T>> M;
@@ -137,7 +142,7 @@ void Matrix<T>::printColumnSpace() {
         result += s[i];
 
         // Insert a space every fifth letter
-        if ((i + 1) % (int)DEFAULT_KEY_LENGTH == 0 && i != s.length() - 1) {
+        if ((i + 1) % BLOCK_LENGTH == 0 && i != s.length() - 1) {
             result += ' ';
         }
     }
@@ -250,6 +255,16 @@ Matrix<T> Matrix<T>::createIdentity(int size) {
     return I;
 }
 
+template <typename T>
+void Matrix<T>::insertColumn(int columnNumber, T& elem) {
+    if (columnNumber != previousColumn) {
+        currentRow = 0;
+    }
+    this->M[currentRow++][columnNumber] = elem;
+    previousColumn = columnNumber;
+    
+
+}
 /// @brief Assuming A has more columns than b and their rows are of equal length
 /// @param A 
 /// @param b 

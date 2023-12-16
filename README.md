@@ -5,8 +5,20 @@ This project provides elementary tools in the world of cryptography. It provides
 - [Features](#Features)
 
 ## Features
+
 - Classical Ciphers    
-- XOR Ciphers
+    - XOR Ciphers
+    - Transposition Columnar Ciphers
+    - Polyalphabetic Ciphers
+    - ROT13 Ciphers
+
+- Modern Ciphers
+    - RSA
+    - Zero Knowledge Proofs
+
 - Basic Matrix Operations
-    - Addition/Substraction
+    - Addition/Subtraction
     - Scalar Multiplication
+    - Inverse
+    - Row and Column Swaps
+

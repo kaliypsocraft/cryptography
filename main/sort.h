@@ -20,10 +20,9 @@ class MergeSort {
   public: 
       void sort(vector<T>&, int, int);
 };
-
 template <typename T>
 void QuickSort<T>::sort(vector<T>& A, int lo, int hi) {
-  if (lo >= hi) {
+  if (lo >= hi || lo < 0) {
     return;
   }
   int pivot = partition(A, lo, hi);
@@ -35,24 +34,40 @@ void QuickSort<T>::sort(vector<T>& A, int lo, int hi) {
 template <typename T>
 int QuickSort<T>::partition(vector<T>& A, int lo, int hi) {
   // Middle element
-  int leftPointer = lo;
-  int rightPointer = hi;
-  int pivotLocation = hi;
-  T pivotElement = A[pivotLocation];
+  // Median-of-three pivot selection
+  int mid = lo + (hi - lo) / 2;
+  if (A[lo] > A[mid]) {
+    swap(A, lo, mid);
+  }
+  if (A[lo] > A[hi]) {
+    swap(A, lo, hi);
+  }
+  if (A[mid] > A[hi]) {
+    swap(A, mid, hi);
+  }
+  swap(A, mid, hi - 1);  // Place pivot at hi-1
 
-  while(leftPointer < rightPointer) {
-    while (A[leftPointer] <= pivotElement && leftPointer < rightPointer) {
+  // Middle element
+  int pivotLocation = hi - 1;
+  T pivotElement = A[pivotLocation];
+  int leftPointer = lo;
+  int rightPointer = hi - 2;  // Adjusted rightPointer
+  
+  while (leftPointer < rightPointer) {
+    while (A[leftPointer] < pivotElement) {
       leftPointer++;
-      // Move towards middle
     }
-    // Stops when finds an element greater than or equal the pivot
-    while (A[rightPointer] > pivotElement && leftPointer < rightPointer) {
+    while (A[rightPointer] > pivotElement) {
       rightPointer--;
     }
-    swap(A, leftPointer, rightPointer);
+    if (leftPointer <= rightPointer) {
+      swap(A, leftPointer, rightPointer);
+      //leftPointer++;
+      //rightPointer--;
+    }
   }
-  swap(A, rightPointer, pivotLocation);
-  return rightPointer;
+  swap(A, leftPointer, pivotLocation);
+  return leftPointer;
 }
 template <typename T>
 void QuickSort<T>::swap(vector<T>& A, int index1, int index2) {
