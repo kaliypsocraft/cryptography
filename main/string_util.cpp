@@ -5,6 +5,19 @@
 
 using std::cout, std::cin, std::find;
 // Custom comparison function based on a specific ordering
+/// @brief 
+/// @param message 
+/// @return 
+std::string removeSpaces(std::string message) {
+    std::string formatted = "";
+    for (const auto& c : message) {
+        if (c != ' ') {
+            formatted += toupper(c);
+        }
+    }
+    return formatted;
+}
+
 bool customOrder(char a, char b) {
     // Define your custom ordering logic here
     std::string ordering = RANDOM_KEY;
@@ -21,7 +34,7 @@ bool customOrder(char a, char b) {
 /// @param s 
 /// @return 
 std::string formatMessage(std::string s) {
-    while (s.length() % DEFAULT_KEY_LENGTH != 0) {
+    while (s.length() % (int)DEFAULT_KEY_LENGTH != 0) {
         s += ' ';
     }
     return s;
