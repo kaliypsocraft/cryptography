@@ -18,7 +18,7 @@ using std::vector, std::cout, std::cin, std::find;
 
 int main() {
     ColumnarCipher test;
-    test.encrypt("THIS IS WIKIPEDIA");
+    cout << "Decrypted" << test.decrypt("COSHSAEIADTNOXELIFWTPTTRRRAXHBMETNANSIOEFXRLESIOOPEHEGASANPTRMBODECELD") << '\n';
     
     
     return 0;

@@ -10,7 +10,6 @@ using std::cout, std::cin, std::find;
 /// @return 
 std::string removeSpaces(std::string message) {
     std::string formatted = "";
-    cout << message << '\n';
     for (const auto& c : message) {
         if (c != ' ') {
             formatted += toupper(c);

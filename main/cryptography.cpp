@@ -42,6 +42,31 @@ vector<int> generateKey(int length)
     return key;
 }
 
+/// @brief 
+/// @param message 
+/// @return 
+string SubstitutionCipher::encrypt(const string& message) {
+    return "TODO";
+}
+
+/// @brief 
+/// @param message 
+/// @return 
+string SubstitutionCipher::decrypt(const string& message) {
+    string key = formatKey("THE", message.length());
+    
+    return "TODO";
+}
+
+string SubstitutionCipher::formatKey(const string& key, int length) {
+    string formattedKey = "";
+    while(formattedKey.length() < length) {
+        formattedKey += key;
+    }
+    return formattedKey;
+}
+
+
 /// @brief
 /// @param message
 /// @return
@@ -97,7 +122,17 @@ string PolyAlphabeticCipher::encrypt(const string &message)
 /// @return
 string PolyAlphabeticCipher::decrypt(const string &cipher)
 {
-    return "TODO";
+    string cipherText = removeSpaces(cipher);
+    string decrypedText = "";
+    string key = formatKey(RANDOM_KEY, cipherText);
+
+    for (int i = 0; i < cipherText.size(); i++)
+    {
+        int plainCharacter = cipherText[i] - 65;
+        int keyCharacter = key[i] - 65;
+        cipherText += ((plainCharacter + keyCharacter) % 26) + 65;
+    }
+    return cipherText;
 }
 
 string PolyAlphabeticCipher::formatKey(const string &key, const string &plainText)
@@ -155,9 +190,6 @@ string ColumnarCipher::encrypt(const string &plainText)
     vector<vector<char>> plainString = generateColumnar(message,
                                                         rowLength,
                                                         DEFAULT_KEY_LENGTH);
-    Matrix<char> generator(plainString, rowLength, DEFAULT_KEY_LENGTH);
-    generator.printMatrix();
-    generator.printColumnSpace();
 
     int ordering[RANDOM_KEY.length()];
     getOrdering(ordering);
@@ -169,8 +201,17 @@ string ColumnarCipher::encrypt(const string &plainText)
         }
     }
     transposed.printMatrix();
-    transposed.printColumnSpace();
-    return "TODO";
+    string cipherText = "";
+    for (int i = 0; i < DEFAULT_KEY_LENGTH; i++) {
+        for (int j = 0; j < rowLength; j++) {
+            char elem = transposed.getElement(j, i);
+            if (elem != ' ') {
+                cipherText += transposed.getElement(j, i);
+            }
+        
+        }
+    }
+    return cipherText;
 }
 
 
@@ -179,19 +220,60 @@ string ColumnarCipher::encrypt(const string &plainText)
 /// @return
 string ColumnarCipher::decrypt(const string &cipherText)
 {
+    string nonsense = removeSpaces(cipherText);
+    nonsense = formatMessage(nonsense);
+    int rowLength = ceil(nonsense.length() / DEFAULT_KEY_LENGTH);
+    vector<vector<char>> cipherString = generateDecryption(nonsense,
+                                                        rowLength,
+                                                        DEFAULT_KEY_LENGTH);
+    Matrix<char> cipher(cipherString, rowLength, DEFAULT_KEY_LENGTH);
+    cipher.printMatrix();
     int ordering[RANDOM_KEY.length()];
     getOrdering(ordering);
 
-    return "TODO";
+    for (int i = 0; i < RANDOM_KEY.length(); i++) {
+        cout << ordering[i];
+    }
+    cout << '\n';
+
+    Matrix<char> decryption(rowLength, DEFAULT_KEY_LENGTH);
+    for (int i = 0; i < DEFAULT_KEY_LENGTH; i++) {
+        for (int j = 0; j < rowLength; j++) {    
+            decryption.insertColumn(i, cipherString[j][ordering[i]]);
+        }
+    }
+
+    string decrypted = "";
+    for (int i = 0; i < rowLength; i++) {
+        for (int j = 0; j < DEFAULT_KEY_LENGTH; j++) {
+            decrypted += decryption.getElement(i, j);
+        }
+    }
+
+    decryption.printMatrix();
+    return decrypted;
 }
 
+vector<vector<char>> ColumnarCipher::generateDecryption(const string& cipher, int rows, int columns) {
+    vector<vector<char>> word;
+
+    word.resize(rows, vector<char>(columns, 0));
+    int index = 0;
+    for (int j = 0; j < columns; j++)
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            word[i][j] = cipher[index++];
+        }
+    }
+    return word;
+}
 /// @brief 
 /// @param order 
 void ColumnarCipher::getOrdering(int *order)
 {
-    vector<char> sorted(RANDOM_KEY.begin(), RANDOM_KEY.end());
-    QuickSort<char> sorter;
-    sorter.sort(sorted, 0, sorted.size() - 1);
+    string sorted = RANDOM_KEY;
+    std::sort(sorted.begin(), sorted.end());
 
     for (int i = 0; i < RANDOM_KEY.length(); i++)
     {

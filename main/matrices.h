@@ -45,6 +45,7 @@ class Matrix {
         Matrix augment(const Matrix&, const Matrix&);
         void insertColumn(int, T&);
         void printMatrix();
+   
         void printColumnSpace();
         Matrix transpose();
         double determinant(const Matrix&);
@@ -56,10 +57,10 @@ class Matrix {
         static Matrix createIdentity(int);
         Matrix getAdjugate();
 
-        vector<T> extractColumn(int);
-
         void swapColumn(int, int);
         void swapRow(int, int);
+
+        T getElement(int, int);
     
     private:
         int currentRow = 0;
@@ -67,6 +68,7 @@ class Matrix {
         
         int rows_;
         int columns_;
+        string resultString = "";
         std::vector<std::vector<T>> M;
 };
 
@@ -107,6 +109,16 @@ Matrix<T>::Matrix(vector<vector<T>> A, int rows, int columns) : rows_(rows), col
             this->M[i][j] = A[i][j];
         }
     }
+}
+
+/// @brief 
+/// @tparam T 
+/// @param row 
+/// @param col 
+/// @return 
+template <typename T>
+T Matrix<T>::getElement(int row, int col) {
+    return this->M[row][col];
 }
 
 template <typename T>
@@ -255,11 +267,16 @@ Matrix<T> Matrix<T>::createIdentity(int size) {
     return I;
 }
 
+/// @brief 
+/// @tparam T 
+/// @param columnNumber 
+/// @param elem 
 template <typename T>
 void Matrix<T>::insertColumn(int columnNumber, T& elem) {
     if (columnNumber != previousColumn) {
         currentRow = 0;
     }
+
     this->M[currentRow++][columnNumber] = elem;
     previousColumn = columnNumber;
     
@@ -336,6 +353,10 @@ Matrix<T> Matrix<T>::getAdjugate() {
     return Matrix(2, 2);
 }
 
+/// @brief 
+/// @tparam T 
+/// @param c1 
+/// @param c2 
 template <typename T>
 void Matrix<T>::swapColumn(int c1, int c2) {
     for(int i = 0; i < this->M.size(); i++) {
@@ -343,6 +364,11 @@ void Matrix<T>::swapColumn(int c1, int c2) {
     }
 
 }
+
+/// @brief 
+/// @tparam T 
+/// @param r1 
+/// @param r2 
 template <typename T>
 void Matrix<T>::swapRow(int r1, int r2) {
     for(int j = 0; j < this->M[0].size(); j++) {
