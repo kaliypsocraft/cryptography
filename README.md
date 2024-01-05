@@ -12,8 +12,9 @@ This project provides elementary tools in the world of cryptography. It provides
     - Polyalphabetic Ciphers
     - ROT13 Ciphers
 
-- Modern Ciphers
+- Classic Cryptographic Protocols
     - RSA
+    - Diffie-Hellman Key Exchange
     - Zero Knowledge Proofs
 
 - Basic Matrix Operations
@@ -22,3 +23,13 @@ This project provides elementary tools in the world of cryptography. It provides
     - Inverse
     - Row and Column Swaps
 
+### Building
+
+1. Run the command `./compile.sh` 
+
+### Basic Commands
+
+| Protocol | Command |
+| ---------|---------|
+| RSA      | `RSA` or `r`
+| Diffie Hellman | `DH`| 
