@@ -2,6 +2,7 @@
 #define CONSTANTS_H
 
 #include <vector>
+#include <string>
 // some declarations in
 // the header file.
 const int BIT_SIZE = 8;
@@ -13,6 +14,7 @@ const double DEFAULT_KEY_LENGTH = (double)RANDOM_KEY.length();
 const std::vector<char> ALPHABET =  {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                                      'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                                      'U', 'V', 'W', 'X', 'Y', 'Z'};
+const int NOTIONAL_LARGE_PRIME = 17;
 
 
 #endif

@@ -2,7 +2,6 @@
 #include "cryptography.h"
 #include "constants.h"
 #include "string_util.h"
-#include <unordered_map>
 #include <string>
 #include "matrices.h"
 #include <vector>
@@ -12,6 +11,7 @@
 #include <random>
 #include <bitset>
 #include <cstdlib>
+#include "colours.h"
 
 #define BYTE 255;
 
@@ -307,3 +307,67 @@ vector<vector<char>> ColumnarCipher::generateColumnar(const string &s, int rows,
     }
     return word;
 }
+/// @brief 
+/// @return Biggest prime in the list 
+int segmentedSieve(int n) {
+    return 0;
+}
+
+/// @brief Conducts a RSA encryption protocol. This involves utilising the public key pair (n, e)
+/// @param plainText 
+/// @return 
+string RSA::encrypt(const string &plainText) {
+    return "TODO";
+}
+
+/// @brief Conducts a RSA decryption protocol. This involves utilising the private key pair (n ,d)
+/// @param cipherText 
+/// @return 
+string RSA::decrypt(const string &cipherText) {
+    return "TODO";
+}
+
+void RSA::generatePublicKey(int n) {
+    //this->publicKey = 0xFFFF;
+} 
+
+void RSA::generatePrivateKey(int n, long long e) {
+
+}
+
+/// @brief 
+/// @param  
+/// @return 
+long long DiffieHellman::encrypt(const string&) {
+    // public generator
+    int g = rand() % (int) DEFAULT_KEY_LENGTH;
+    int n = NOTIONAL_LARGE_PRIME;
+
+    int x = rand() % 5;
+    int y = rand() % 7;
+
+    cout << "x: " << x << " y: " << y << endl;
+
+    this->alice_private_x = x;
+    this->bob_private_y = y;
+
+    int A = (int)pow(g, x) % n;
+    int B = (int)pow(g, y) % n;
+
+    this->alice_public_key = A;
+    this->bob_public_key = B;
+
+    cout << "A: " << A << " B: " << B << endl;
+    cout << "Ka: " << (int) pow(B, x) % n << " Kb: " << (int) pow(A, y) % n << endl;
+    if ((int) pow(B, x) % n == (int) pow(A, y) % n) {
+        cout << GREEN_TEXT << "Keys exchanged properly" << RESET_COLOR << endl;
+    } else {
+        cout << RED_TEXT << "Invalid!" << RESET_COLOR << endl;
+    }
+
+    return (int) pow(B, x) % n;
+}
+
+
+
+

@@ -7,6 +7,7 @@ using namespace std;
 #include "cryptography.h"
 #include "constants.h"
 #include <vector>
+#include <cmath>
 #include <string>
 #include <bitset>
 #include <iomanip>
@@ -17,26 +18,28 @@ using namespace std;
 template <typename T>
 class Matrix {
     public:
+        /*
+            Basic constructors for creating our matricies
+        */
         Matrix(int, int);
         Matrix(int);
         Matrix(std::vector<std::vector<T>>, int, int);
 
         
         /*
-        * pre-condition A and B both have n rows and m columns
-        *
+         pre-condition A and B both have n rows and m columns
+        
         */
         Matrix operator+(const Matrix&);
         Matrix operator-(const Matrix&);
 
         /*
-        * Matrix multiplication and division to be used assume n == m where n is the number 
-        * of rows in A and m is the number of columns in B.
+         Matrix multiplication and division to be used assume n == m where n is the number 
+         of rows in A and m is the number of columns in B.
         */ 
         Matrix operator*(const Matrix&);
         Matrix operator*(double);
         Matrix operator/(double);
-
         Matrix operator%(double modulus);
 
         /*
@@ -49,11 +52,13 @@ class Matrix {
         void printColumnSpace();
         Matrix transpose();
         double determinant(const Matrix&);
-        Matrix getSubMatrix(int, const Matrix&);
+        Matrix getSubMatrix(int, int, const Matrix&);
+       
+        Matrix getCofactor();
 
         // Requires determinant and adjugate
         Matrix inverse();
-
+        // Creates an identity matrix of size n provided by the user
         static Matrix createIdentity(int);
         Matrix getAdjugate();
 
@@ -63,6 +68,7 @@ class Matrix {
         T getElement(int, int);
     
     private:
+        // Used for inserting columns
         int currentRow = 0;
         int previousColumn = 0;
         
@@ -135,8 +141,8 @@ void Matrix<T>::printMatrix() {
 }
 
 
-template <typename T>
 /// @brief Prints out the contents of a matrix
+template <typename T>
 void Matrix<T>::printColumnSpace() {
     int length = 0;
     string s = "";
@@ -160,8 +166,6 @@ void Matrix<T>::printColumnSpace() {
     }
     cout << result << '\n';
 }
-
-
 
 /// @brief 
 /// @param B 
@@ -221,6 +225,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix& B) {
     }
     return result;
 } 
+
  /// @brief 
  /// @param 
  /// @return 
@@ -248,11 +253,12 @@ Matrix<T> Matrix<T>::operator/(double lambda) {
     }
     return result;
 } 
-template <typename T>
+
 /// @brief Creates an identity matrix with the pre-condition that rows and columns are equal
 /// @param rows 
 /// @param columns 
 /// @return An n x n identity matrix
+template <typename T>
 Matrix<T> Matrix<T>::createIdentity(int size) {
     Matrix I(size);
     for (int i = 0; i < I.rows_; i++) {
@@ -307,12 +313,16 @@ Matrix<T> Matrix<T>::transpose() {
     return At;
 }
 // TODO: Requires adjugate 
-/// @brief 
+/// @brief Assuming the determinant is non zero
 /// @return 
 template <typename T>
 Matrix<T> Matrix<T>::inverse() {
-    if (determinant(Matrix(this->M, this->rows_, this->columns_)) == 0) {
-        
+    int det = determinant(*this);
+    
+    if (det != 0) {
+        return getAdjugate() / determinant(*this);
+    } else {
+        throw std::runtime_error("Matrix is not square or has zero determinant");
     }
 }
 /// @brief Returns the determinant
@@ -326,7 +336,22 @@ double Matrix<T>::determinant(const Matrix& A) {
         return (a * d) - (b * c);
     } 
     // Otherwise it is a 3 x 3
-    return (A.M[0][0] * determinant(getSubMatrix(0, A))) - (A.M[0][1] * determinant(getSubMatrix(1, A))) + (A.M[0][2] * determinant(getSubMatrix(2, A)));
+    return (A.M[0][0] * determinant(getSubMatrix(0, 0, A))) - (A.M[0][1] * determinant(getSubMatrix(0, 1, A))) + (A.M[0][2] * determinant(getSubMatrix(0, 2, A)));
+}
+
+/// @brief 
+/// @tparam T 
+/// @return 
+template <typename T>
+Matrix<T> Matrix<T>::getCofactor() {
+    Matrix<T> coFactors(3, 3);
+    for (int i = 0; i < rows_; i++) {
+        for(int j = 0; j < columns_; j++) {
+            double det = determinant(getSubMatrix(i, j, *this));
+            coFactors.M[i][j] = pow(-1, i + j + 2) * det;
+        }
+    }
+    return coFactors;
 }
 
 /// @brief 
@@ -334,23 +359,51 @@ double Matrix<T>::determinant(const Matrix& A) {
 /// @param subject 
 /// @return 
 template <typename T>
-Matrix<T> Matrix<T>::getSubMatrix(int col, const Matrix& subject) {
+Matrix<T> Matrix<T>::getSubMatrix(int row, int col, const Matrix& subject) {
     vector<vector<double>> subMatrix;
-    for (int i = 1; i < subject.rows_ ; i++) {
-        for(int j = 0; j < subject.columns_; j++) {
-            if (j != col) {
-                subMatrix[i][j] = subject.M[i][j];
+    subMatrix.resize(subject.rows_ - 1 , std::vector<double>(subject.columns_ - 1 , 0.0));
+    int subRow = 0;
+    bool incrementSubRow = false;
+    for (int i = 0; i < subject.rows_; i++) {
+        int subCol = 0;
+        for (int j = 0; j < subject.columns_; j++) {
+            if (row != i && col != j) {
+                subMatrix[subRow][subCol] = subject.M[i][j];
+                subCol++;
+                incrementSubRow = true;
             }
         }
+        if (incrementSubRow) {
+            subRow++;
+            incrementSubRow = false;
+        }
+
     }
     return Matrix(subMatrix, 2, 2);
 }
+
+/// @brief 
+/// @tparam T 
+/// @return 
 template <typename T>
 Matrix<T> Matrix<T>::getAdjugate() {
-    if (this->columns_ == 2 && this->rows_ == 2) {
-
+    if (this->columns_ == 2 && this->rows_ == 2) { 
+        Matrix adjugate(2, 2);
+        for (int row = 0; row < 2; row++) {
+            for (int col = 0; col < 2; col++) {
+                if (row == 0 && col == 0) {
+                    adjugate.M[row][col] = this->M[1][1];
+                } else if (row == 1 && col == 1) {
+                    adjugate.M[row][col] = this->M[0][0];
+                } else {
+                    adjugate.M[row][col] = - (this->M[row][col]);
+                }
+            }
+        }
+        return adjugate;
     }
-    return Matrix(2, 2);
+
+    return getCofactor().transpose();
 }
 
 /// @brief 
