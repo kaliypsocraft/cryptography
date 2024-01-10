@@ -55,12 +55,16 @@ class ColumnarCipher {
 };
 class DiffieHellman {
     public: 
-        long long encrypt(const string&);
-        string decrypt(const string&);
+        long long generateKey();
     private:
         int alice_public_key;
         int alice_private_x;
         int bob_private_y;
         int bob_public_key;
+};
+
+class ZeroKnowledge {
+    public:
+        bool zero_knowledge_proof();
 };
 #endif

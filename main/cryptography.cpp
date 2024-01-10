@@ -1,17 +1,14 @@
 #include <iostream>
+#include <string>
+#include <vector>
+#include <math.h>
+#include <algorithm>
+
+#include "colours.h"
+#include "matrices.h"
 #include "cryptography.h"
 #include "constants.h"
 #include "string_util.h"
-#include <string>
-#include "matrices.h"
-#include <vector>
-#include <math.h>
-#include "sort.h"
-#include <algorithm>
-#include <random>
-#include <bitset>
-#include <cstdlib>
-#include "colours.h"
 
 #define BYTE 255;
 
@@ -151,9 +148,10 @@ string PolyAlphabeticCipher::formatKey(const string &key, const string &plainTex
 /// @return
 string ROT13::encrypt(const string &message)
 {
+    string plainText = (message);
     string deciphered = "";
     int index = 0;
-    for (const auto &elem : message)
+    for (const auto &elem : plainText)
     {
         char c = toupper(elem);
         if (isCharacter(c))
@@ -332,13 +330,13 @@ void RSA::generatePublicKey(int n) {
 } 
 
 void RSA::generatePrivateKey(int n, long long e) {
-
+    //TODO: 
 }
 
 /// @brief 
 /// @param  
 /// @return 
-long long DiffieHellman::encrypt(const string&) {
+long long DiffieHellman::generateKey() {
     // public generator
     int g = rand() % (int) DEFAULT_KEY_LENGTH;
     int n = NOTIONAL_LARGE_PRIME;
@@ -366,6 +364,12 @@ long long DiffieHellman::encrypt(const string&) {
     }
 
     return (int) pow(B, x) % n;
+}
+
+/// @brief A zero knowledge non-interactive proof using a Diffie Hellman Protocol
+/// @return 
+bool ZeroKnowledge::zero_knowledge_proof() {
+    // TODO:
 }
 
 
