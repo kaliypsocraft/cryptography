@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function compile() {
-    SOURCE_FILES="main.cpp cryptography.cpp string_util.cpp"
+    SOURCE_FILES="main.cpp cryptography.cpp string_util.cpp tree.cpp"
 
     # Specify the name of the output executable
     OUTPUT_NAME="cryptography"
@@ -10,7 +10,7 @@ function compile() {
     COMPILER="g++"
 
     # Compilation flags (adjust as needed)
-    COMPILE_FLAGS="-std=c++17"
+    COMPILE_FLAGS="-std=c++17 -lssl -lcrypto"
 
     # Compile each source file
     for SOURCE_FILE in $SOURCE_FILES; do
@@ -35,7 +35,7 @@ function compile() {
 }
 if [ $1 == 'clean' ]
 then
-    rm -rf main.o cryptography.o matrices.o peda-session-sleep.txt string_util.o .gdb_history sort.o
+    rm -rf main.o cryptography.o matrices.o peda-session-sleep.txt string_util.o .gdb_history sort.o tree.o
 # Define your source files
 else
     compile
