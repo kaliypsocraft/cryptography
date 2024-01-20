@@ -19,10 +19,13 @@ class MerkleTree {
         string direction;
 
         vector<T> init_protocol(vector<T> leaves);
-        vector<vector<T>> generateMerkleTree(vector<T>);
+        vector<vector<T>> generateMerkleTree(vector<vector<T>>, vector<T>);
         T generateMerkleRoot(vector<T>);
 };
 
+/// @brief Function as produced by Jonathan Drapeua on StackOverflow
+/// @param str 
+/// @return 
 string sha256(const string str)
 {
     unsigned char hash[SHA256_DIGEST_LENGTH];
@@ -40,11 +43,17 @@ string sha256(const string str)
 template <typename T>
 vector<T> MerkleTree<T>::init_protocol(vector<T> leaves) {
     vector<T> hashes;
+    vector<vector<T>> MT;
     for (const auto& input : leaves) {
         hashes.push_back(sha256(input));
     }
-    for (const auto& hash : hashes) {
-        std::cout<< "[ " << hash << " ]" << "\n";
+    MT = generateMerkleTree(MT, hashes);
+    for (vector<T> layer : MT) {
+        cout << "This layer has " << layer.size() << " elems" << "\n";
+        for (T elem : layer) {
+            cout << elem << " | ";
+        }
+        cout << "\n";
     }
     return hashes;
 }
@@ -58,8 +67,17 @@ std::string getDirection() {
 /// @param hashes 
 /// @return 
 template <typename T>
-vector<vector<T>> MerkleTree<T>::generateMerkleTree(vector<T> hashes) {
-
+vector<vector<T>> MerkleTree<T>::generateMerkleTree(vector<vector<T>> MT, vector<T> hashes) {
+    vector<T> combinedHashes;
+    MT.push_back(hashes);
+    for (int i = 0; i < hashes.size(); i += 2) {
+        string concated = hashes[i] + hashes[i + 1];
+        combinedHashes.push_back(sha256(concated));
+    }
+    if (hashes.size() > 1) {
+        return generateMerkleTree(MT, combinedHashes);
+    }
+    return MT;
 }
        
 /// @brief From the leaf nodes we traverse upwards towards the root and then return the root
