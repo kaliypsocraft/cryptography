@@ -1,10 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <limits>
 #include "cryptography.h"
 #include "constants.h"
 #include "sort.h"
+#include "tree.h"
 #include "matrices.h"
 #include "string_util.h"
 
@@ -19,6 +21,10 @@ void processProtocol(const std::string& protocol, const std::string& message);
 int main() {
     cout << "[ Welcome to Kali's Cryptology Project ]" << std::endl;
     
+    vector<std::string> input = {"helloworld", "hellomom", "hellodad", "iamacompetentman"};
+    MerkleTree<std::string> tree;
+    tree.init_protocol(input);
+    /*
     std::string message;
     std::string protocol;
 
@@ -29,8 +35,8 @@ int main() {
         processProtocol(protocol, message);
         iterations++;
     }
-
-    cout << "Exiting program!" << std::endl;
+    */
+    //cout << "Exiting program!" << std::endl;
     return 0;
 }
 

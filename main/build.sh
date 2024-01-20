@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function compile() {
-    SOURCE_FILES="main.cpp cryptography.cpp string_util.cpp tree.cpp"
+    SOURCE_FILES="main.cpp cryptography.cpp string_util.cpp"
 
     # Specify the name of the output executable
     OUTPUT_NAME="cryptography"
@@ -27,15 +27,14 @@ function compile() {
 
     # Check if compilation was successful
     if [ $? -eq 0 ]; then
-        echo "Compilation successful. Running the program:"
-        ./$OUTPUT_NAME
+        echo "Compilation successful"
     else
         echo "Compilation failed."
     fi
 }
 if [ $1 == 'clean' ]
 then
-    rm -rf main.o cryptography.o matrices.o peda-session-sleep.txt string_util.o .gdb_history sort.o tree.o
+    rm -rf main.o cryptography.o matrices.o peda-session-sleep.txt string_util.o .gdb_history sort.o
 # Define your source files
 else
     compile
