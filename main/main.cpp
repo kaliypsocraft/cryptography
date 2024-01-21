@@ -24,6 +24,8 @@ int main() {
     vector<std::string> input = {"helloworld", "hellomom", "hellodad", "iamacompetentman"};
     MerkleTree<std::string> tree;
     tree.init_protocol(input);
+    vector<std::string> valid_input = {"936a185caaa266bb9cbe981e9e05cb78cd732b0b3280eb944412bb6f8f8f07af", "d9581e7af6def52328ad6914e8492bb6cee685705ccec565f6fec1066cadf518", " 0b0373712c4f0568173cc209611e26c0bc62b700b59b50045279f5b711ceaf59"};
+    cout << tree.validate(valid_input) << "\n";
     /*
     std::string message;
     std::string protocol;
@@ -36,7 +38,7 @@ int main() {
         iterations++;
     }
     */
-    //cout << "Exiting program!" << std::endl;
+    cout << "Exiting program!" << std::endl;
     return 0;
 }
 

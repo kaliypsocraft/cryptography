@@ -12,17 +12,33 @@
 using namespace std;
 
 template <typename T>
-class MerkleTree {
+class MerkleNode {
     public:
-        T data;
-        string nId;
+        T hash;
+        string data;
         string direction;
 
-        vector<T> init_protocol(vector<T> leaves);
-        vector<vector<T>> generateMerkleTree(vector<vector<T>>, vector<T>);
-        T generateMerkleRoot(vector<T>);
+        MerkleNode(string, string, T);
 };
 
+template <typename T>
+class MerkleTree {
+    public:
+        string root;
+
+        vector<MerkleNode<T>> init_protocol(vector<T> leaves);
+        vector<vector<MerkleNode<T>>> generateMerkleTree(vector<vector<MerkleNode<T>>>, vector<T>);
+        T generateMerkleRoot(vector<T>);
+        bool validate(vector<T> nodes);
+};
+
+
+template <typename T>
+MerkleNode<T>::MerkleNode(string data, string direction, T hash) {
+    this->direction = direction;
+    this->data = data;
+    this->hash = hash;
+}
 /// @brief Function as produced by Jonathan Drapeua on StackOverflow
 /// @param str 
 /// @return 
@@ -39,9 +55,19 @@ string sha256(const string str)
     }
     return ss.str();
 }
+/// @brief Optional function to ensure evenness at each layer
+/// @tparam T 
+/// @param hashes 
+template <typename T>
+void ensureEven(vector<T> &hashes) {
+    int length = hashes.size();
+    if (length % 2 != 0 && length > 1) {
+        hashes.push_back(sha256(hashes[length - 1]));
+    }  
+}
 
 template <typename T>
-vector<T> MerkleTree<T>::init_protocol(vector<T> leaves) {
+vector<MerkleNode<T>> MerkleTree<T>::init_protocol(vector<T> leaves) {
     vector<T> hashes;
     vector<vector<T>> MT;
     for (const auto& input : leaves) {
@@ -55,21 +81,34 @@ vector<T> MerkleTree<T>::init_protocol(vector<T> leaves) {
         }
         cout << "\n";
     }
+
+    cout << "The root hash is " << root << "\n";
     return hashes;
 }
-/// @brief false is LEFT true is RIGHT
-/// @return 
-std::string getDirection() {
-
+string getDirection(int index) {
+    return index % 2 == 0 ? "LEFT" : "RIGHT";
 }
+
+template <typename T>
+vector<MerkleNode<T>> generateNodes(vector<T> hashes) {
+    int length = hashes.size();
+    vector<MerkleNode<T>> merkleRow;
+    for (int i = 0; i < length; i++) {
+        MerkleNode<T> node("N/A", getDirection(i), hashes[i]);
+        merkleRow.push_back(node);
+    }
+    return merkleRow;
+}
+
 /// @brief From the leaf nodes we traverse upwards towards the root and then return the root
 /// @tparam T 
 /// @param hashes 
 /// @return 
 template <typename T>
-vector<vector<T>> MerkleTree<T>::generateMerkleTree(vector<vector<T>> MT, vector<T> hashes) {
+vector<vector<MerkleNode<T>>> MerkleTree<T>::generateMerkleTree(vector<vector<MerkleNode<T>>> MT, vector<T> hashes) {
     vector<T> combinedHashes;
-    MT.push_back(hashes);
+    ensureEven(hashes);
+    MT.push_back(generateNodes(hashes));
     for (int i = 0; i < hashes.size(); i += 2) {
         string concated = hashes[i] + hashes[i + 1];
         combinedHashes.push_back(sha256(concated));
@@ -77,9 +116,22 @@ vector<vector<T>> MerkleTree<T>::generateMerkleTree(vector<vector<T>> MT, vector
     if (hashes.size() > 1) {
         return generateMerkleTree(MT, combinedHashes);
     }
+    this->root = hashes[0];
     return MT;
 }
-       
+
+template <typename T>
+bool MerkleTree<T>::validate(vector<T> input) {
+    string combinedHash = "";
+    for (int i = 0; i < input.size(); i += 2) {
+        combinedHash = sha256(input[i] + input[i + 1]);
+        //cout << "Hashing: " << input[i] << " and " << input[i + 1] << " =  " <<  sha256(input[i] + input[i + 1]) << "\n" ;
+        input.push_back(combinedHash);
+    }
+    //cout << combinedHash << "\n";
+    return combinedHash == this->root;
+}
+
 /// @brief From the leaf nodes we traverse upwards towards the root and then return the root
 /// @tparam T 
 /// @param hashes 
