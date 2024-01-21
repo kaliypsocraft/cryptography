@@ -27,8 +27,7 @@ function compile() {
 
     # Check if compilation was successful
     if [ $? -eq 0 ]; then
-        echo "Compilation successfulq
-        "
+        echo "Compilation successful"
     else
         echo "Compilation failed."
     fi

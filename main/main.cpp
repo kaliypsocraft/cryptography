@@ -3,8 +3,10 @@
 #include <string>
 #include <algorithm>
 #include <limits>
+
 #include "cryptography.h"
 #include "constants.h"
+#include "colours.h"
 #include "sort.h"
 #include "tree.h"
 #include "matrices.h"
@@ -18,17 +20,39 @@ const int LIMIT = 50;
 void getUserInput(std::string& message, std::string& protocol);
 void processProtocol(const std::string& protocol, const std::string& message);
 
+void init_nodes(vector<std::string> &input) {
+    std::string inputStr = " ";
+    while(true) {
+        cin >> inputStr;
+        if (inputStr == "q") {
+            break;
+        }
+        input.push_back(inputStr);
+    }
+}
+
 int main() {
     cout << "[ Welcome to Kali's Cryptology Project ]" << std::endl;
     
-    vector<std::string> input = {"helloworld", "hellomom", "hellodad", "iamacompetentman"};
+    vector<std::string> input;
+    init_nodes(input);
     MerkleTree<std::string> tree;
     vector<vector<MerkleNode<std::string>>> MT = tree.initialProtocol(input);
+    
+    /*
     vector<MerkleProof<std::string>> proof = tree.generateMerkleProof(2, MT);
 
+    cout << "[ Proof ]" << "\n";
     for (int i = 0; i < proof.size(); i++) {
         cout << proof[i].hash << "\n";
     }
+    cout << " Q.E.D " << "\n";
+    */
+    //if (tree.validate(proof, MT[0][2])) {
+    //    cout << GREEN_TEXT << "Validated" << RESET_COLOR  << "\n";
+    //} else {
+    //    cout << RED_TEXT << "Invalid" << RESET_COLOR << "\n";
+    //}
 
     //vector<std::string> valid_input = {"936a185caaa266bb9cbe981e9e05cb78cd732b0b3280eb944412bb6f8f8f07af", "d9581e7af6def52328ad6914e8492bb6cee685705ccec565f6fec1066cadf518", " 0b0373712c4f0568173cc209611e26c0bc62b700b59b50045279f5b711ceaf59"};
     /*
