@@ -35,7 +35,7 @@ function compile() {
 }
 if [ $1 == 'clean' ]
 then
-    rm -rf main.o cryptography.o matrices.o peda-session-sleep.txt string_util.o .gdb_history sort.o
+    rm -rf main.o cryptography.o matrices.o peda-session-cryptography.txt string_util.o .gdb_history sort.o
 # Define your source files
 else
     compile
