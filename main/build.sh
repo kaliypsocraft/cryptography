@@ -1,5 +1,9 @@
 #!/bin/bash
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+RESET='\033[0m' # No Color
+
 function compile() {
     SOURCE_FILES="main.cpp cryptography.cpp string_util.cpp"
 
@@ -27,12 +31,12 @@ function compile() {
 
     # Check if compilation was successful
     if [ $? -eq 0 ]; then
-        echo "Compilation successful"
+        echo -e "${GREEN} Compilation successful ${RESET}"
     else
-        echo "Compilation failed."
+        echo -e "${RED}Compilation failed. ${RESET}"
     fi
 }
-if [ $1 == 'clean' ]
+if [ "$1" == 'clean' ]
 then
     rm -rf main.o cryptography.o matrices.o peda-session-cryptography.txt string_util.o .gdb_history sort.o
 # Define your source files

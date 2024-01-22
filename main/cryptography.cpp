@@ -370,7 +370,7 @@ long long DiffieHellman::generateKey() {
 /// @return 
 bool ZeroKnowledge::zero_knowledge_proof() {
     // TODO:
-    
+    return true;
 }
 
 

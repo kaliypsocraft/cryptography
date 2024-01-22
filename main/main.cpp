@@ -37,17 +37,15 @@ int main() {
     vector<std::string> input;
     init_nodes(input);
     MerkleTree<std::string> tree;
-    vector<vector<MerkleNode<std::string>>> MT = tree.initialProtocol(input);
-    
-    /*
-    vector<MerkleProof<std::string>> proof = tree.generateMerkleProof(2, MT);
+    tree.initialProtocol(input);
+    vector<MerkleProof<std::string>> proof = tree.generateMerkleProof(2);
 
     cout << "[ Proof ]" << "\n";
     for (int i = 0; i < proof.size(); i++) {
         cout << proof[i].hash << "\n";
     }
     cout << " Q.E.D " << "\n";
-    */
+
     //if (tree.validate(proof, MT[0][2])) {
     //    cout << GREEN_TEXT << "Validated" << RESET_COLOR  << "\n";
     //} else {

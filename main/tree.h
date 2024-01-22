@@ -26,15 +26,16 @@ class MerkleNode {
         string direction;
         int index;
 
-        MerkleNode(string, string, T);
+        MerkleNode(string, string, T, int);
 };
 
 template <typename T>
 class MerkleTree {
     public:
         string root;
+        vector<vector<MerkleNode<T>>> merkleTree;
         
-        vector<MerkleProof<T>> generateMerkleProof(int src, vector<vector<MerkleNode<T>>>);
+        vector<MerkleProof<T>> generateMerkleProof(int src);
         vector<vector<MerkleNode<T>>> initialProtocol(vector<T> leaves);
         vector<vector<MerkleNode<T>>> generateMerkleTree(vector<vector<MerkleNode<T>>> merkleTree, vector<T>);
         bool validate(vector<MerkleProof<T>> nodes, MerkleNode<T> start);
@@ -46,10 +47,11 @@ class MerkleTree {
 /// @param direction 
 /// @param hash 
 template <typename T>
-MerkleNode<T>::MerkleNode(string data, string direction, T hash) {
+MerkleNode<T>::MerkleNode(string data, string direction, T hash, int index) {
     this->direction = direction;
     this->data = data;
     this->hash = hash;
+    this->index = index;
 }
 
 /// @brief Function as produced by Jonathan Drapeua on StackOverflow
@@ -90,15 +92,12 @@ vector<vector<MerkleNode<T>>> MerkleTree<T>::initialProtocol(vector<T> leaves) {
     }
     
     MT = generateMerkleTree(MT, hashes);
-
     int i = 0;
     for (vector<MerkleNode<T>> layer : MT) {
-        int j = 0;
         for (MerkleNode<T> elem : layer) {
-            elem.index = j;
-            cout << "At " << i << "," << j << "\n";
+            //elem.index = j;
+            cout << "("<< i << "," << elem.index << ") ";
             cout << "[ Direction: " << elem.direction << "\n" << " Hash: " << elem.hash <<  " ]";
-            j++;
         }
         i++;
         cout << "\n";
@@ -131,18 +130,24 @@ string getDirection(int index) {
 /// @param proof 
 /// @return 
 template <typename T>
-vector<MerkleProof<T>> MerkleTree<T>::generateMerkleProof(int src, vector<vector<MerkleNode<T>>> MT) {
+vector<MerkleProof<T>> MerkleTree<T>::generateMerkleProof(int src) {
     vector<MerkleProof<T>> proofList;
+    vector<vector<MerkleNode<T>>> MT = this->merkleTree;
 
-    MerkleNode<T> initNode = src % 2 ? MT[0][src - 1] : MT[0][src + 1];
-    
-    MerkleProof<T> currNode;
-    currNode.hash = initNode.hash;
-    currNode.index = initNode.index;
-    currNode.direction = initNode.direction;
+    int currentIndex = src;
 
-    for (int i = 0; i < MT[0].size(); i++) {
+    // Grabs the neighbour node 
 
+    for (int i = 0; i < MT.size() - 1; i++) {
+        MerkleNode<T> initNode = currentIndex % 2 ? MT[i][currentIndex - 1] : MT[i][currentIndex + 1];
+        MerkleProof<T> currNode;
+        
+        currNode.hash = initNode.hash;
+        currNode.index = initNode.index;
+        currNode.direction = initNode.direction;
+
+        proofList.push_back(currNode);
+        currentIndex /= 2;
     }
     
     return proofList;
@@ -157,7 +162,7 @@ vector<MerkleNode<T>> generateNodes(vector<T> hashes) {
     int length = hashes.size();
     vector<MerkleNode<T>> merkleRow;
     for (int i = 0; i < length; i++) {
-        MerkleNode<T> node("N/A", getDirection(i), hashes[i]);
+        MerkleNode<T> node("N/A", getDirection(i), hashes[i], i);
         merkleRow.push_back(node);
     }
     return merkleRow;
@@ -170,8 +175,10 @@ vector<MerkleNode<T>> generateNodes(vector<T> hashes) {
 template <typename T>
 vector<vector<MerkleNode<T>>> MerkleTree<T>::generateMerkleTree(vector<vector<MerkleNode<T>>> MT, vector<T> hashes) {
     vector<T> combinedHashes;
+    
     ensureEven(hashes);
     MT.push_back(generateNodes(hashes));
+    
     for (int i = 0; i < hashes.size(); i += 2) {
         string concated = hashes[i] + hashes[i + 1];
         combinedHashes.push_back(sha256(concated));
@@ -180,6 +187,8 @@ vector<vector<MerkleNode<T>>> MerkleTree<T>::generateMerkleTree(vector<vector<Me
         return generateMerkleTree(MT, combinedHashes);
     }
     this->root = hashes[0];
+    this->merkleTree = MT;
+    
     return MT;
 }
 
