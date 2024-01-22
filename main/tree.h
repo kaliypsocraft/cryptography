@@ -38,7 +38,7 @@ class MerkleTree {
         vector<MerkleProof<T>> generateMerkleProof(int src);
         vector<vector<MerkleNode<T>>> initialProtocol(vector<T> leaves);
         vector<vector<MerkleNode<T>>> generateMerkleTree(vector<vector<MerkleNode<T>>> merkleTree, vector<T>);
-        bool validate(vector<MerkleProof<T>> nodes, MerkleNode<T> start);
+        bool validate(vector<MerkleProof<T>> nodes, int start);
 };
 
 /// @brief 
@@ -197,20 +197,22 @@ vector<vector<MerkleNode<T>>> MerkleTree<T>::generateMerkleTree(vector<vector<Me
 /// @param input 
 /// @return 
 template <typename T>
-bool MerkleTree<T>::validate(vector<MerkleProof<T>> proof, MerkleNode<T> start) {
+bool MerkleTree<T>::validate(vector<MerkleProof<T>> proof, int start) {
     string combinedHash = "";
+    MerkleNode<T> initiNode = this->merkleTree[0][start];
 
-    // Bottom layer
-    string hash1 = start.hash;
+    string hash1 = initiNode.hash;
     string hash2 = proof[0].hash;
 
+    for (int i = 1; i < proof.size(); ++i) {
+        combinedHash = proof[i - 1].direction == "Right" ? sha256(hash1 + hash2) : sha256(hash2 + hash1);
+        hash1 = combinedHash; 
+        hash2 = proof[i].hash;
 
-    if (proof[0].direction == "Right") {
-        combinedHash = sha256(hash1 + hash2);
-    } else if (proof[0].direction == "Left") {
-        combinedHash = sha256(hash2 + hash1);
+        cout << "Hash1: " << hash1 << "\n";
+        cout << "Hash2: " << hash2 << "\n";
     }
-    cout << hash1 << " + " << hash2 << " = " << combinedHash << "\n";
+    combinedHash = proof[proof.size() - 1].direction == "Right" ? sha256(hash1 + hash2) : sha256(hash2 + hash1);
     return combinedHash == this->root;
 }
 
