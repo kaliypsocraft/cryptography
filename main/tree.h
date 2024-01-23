@@ -38,6 +38,10 @@ class MerkleTree {
         vector<MerkleProof<T>> generateMerkleProof(int src);
         vector<vector<MerkleNode<T>>> initialProtocol(vector<T> leaves);
         vector<vector<MerkleNode<T>>> generateMerkleTree(vector<vector<MerkleNode<T>>> merkleTree, vector<T>);
+        string updateLeaf(int index, string data);
+        string insertLeaf(string data);
+        string removeLeaf(int index);
+        void printTree();
         bool validate(vector<MerkleProof<T>> nodes, int start);
 };
 
@@ -92,6 +96,7 @@ vector<vector<MerkleNode<T>>> MerkleTree<T>::initialProtocol(vector<T> leaves) {
     }
     
     MT = generateMerkleTree(MT, hashes);
+    /*
     int i = 0;
     for (vector<MerkleNode<T>> layer : MT) {
         for (MerkleNode<T> elem : layer) {
@@ -103,18 +108,58 @@ vector<vector<MerkleNode<T>>> MerkleTree<T>::initialProtocol(vector<T> leaves) {
         cout << "\n";
     }
     cout << "The root hash is " << root << "\n";
+    */
     return MT;
 }
 
-/// @brief 
+/// @brief O (logn)
+/// @tparam T 
+/// @param index 
+/// @param data 
+/// @return 
+template <typename T>
+string MerkleTree<T>::updateLeaf(int index, string data) {
+    return "";
+}
+
+/// @brief O(logn)
+/// @tparam T 
+/// @param data 
+/// @return 
+template <typename T>
+string MerkleTree<T>::insertLeaf(string data) {
+    return "";
+}
+
+/// @brief O(logn)
+/// @tparam T 
+/// @param index 
+/// @return 
+template <typename T>
+string MerkleTree<T>::removeLeaf(int index) {
+    return "";
+}
+
+/// @brief O(1)
 /// @tparam T 
 /// @param  
 template <typename T>
 void printNode(MerkleNode<T> node) {
-    cout << "[ " << node.data  << " ]" << '\n';
-    cout << "[ " << node.hash  << " ]" << '\n';
-    cout << "[ " << node.direction << " ]" << '\n';
+    cout << "[ " << node.data  << " | " <<  node.hash << " | " << node.direction << " ]" << '\n';
 }
+
+/// @brief O(n^2)
+/// @tparam T 
+template <typename T>
+void MerkleTree<T>::printTree() {
+    vector<vector<MerkleNode<T>>> MT = this->merkleTree;
+    for (vector<MerkleNode<T>> depth : MT) {
+        for (MerkleNode<T> node : depth ) {
+            printNode(node);
+        }
+    }
+}
+
 
 /// @brief 
 /// @param index 
@@ -123,7 +168,7 @@ string getDirection(int index) {
     return index % 2 ? "Right" : "Left";
 }
 
-/// @brief 
+/// @brief O (logn)
 /// @tparam T 
 /// @param src 
 /// @param MT 
@@ -153,7 +198,7 @@ vector<MerkleProof<T>> MerkleTree<T>::generateMerkleProof(int src) {
     return proofList;
 }
 
-/// @brief 
+/// @brief O (n)  NOTE: Perhaps convert to nodes one at a time inside generate Merkle Tree
 /// @tparam T 
 /// @param hashes 
 /// @return 
@@ -177,6 +222,8 @@ vector<vector<MerkleNode<T>>> MerkleTree<T>::generateMerkleTree(vector<vector<Me
     vector<T> combinedHashes;
     
     ensureEven(hashes);
+
+    // O(n) operation
     MT.push_back(generateNodes(hashes));
     
     for (int i = 0; i < hashes.size(); i += 2) {

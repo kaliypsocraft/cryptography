@@ -38,8 +38,12 @@ int main() {
     init_nodes(input);
     MerkleTree<std::string> tree;
     tree.initialProtocol(input);
-    vector<MerkleProof<std::string>> proof = tree.generateMerkleProof(2);
+    tree.printTree();
+    //vector<MerkleProof<std::string>> proof = tree.generateMerkleProof(2);
 
+
+
+    /*
     cout << "[ Proof ]" << "\n";
     for (int i = 0; i < proof.size(); i++) {
         cout << proof[i].hash << "\n";
@@ -52,7 +56,7 @@ int main() {
     } else {
         cout << RED_TEXT << "Invalid" << RESET_COLOR << "\n";
     }
-
+    */
     //vector<std::string> valid_input = {"936a185caaa266bb9cbe981e9e05cb78cd732b0b3280eb944412bb6f8f8f07af", "d9581e7af6def52328ad6914e8492bb6cee685705ccec565f6fec1066cadf518", " 0b0373712c4f0568173cc209611e26c0bc62b700b59b50045279f5b711ceaf59"};
     /*
     std::string message;
