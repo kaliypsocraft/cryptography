@@ -10,6 +10,8 @@
 
 using namespace std;
 
+const int defaultVal = 0;
+
 enum NodeDirection {
     LEFT,
     RIGHT,
@@ -29,8 +31,8 @@ class MerkleNode {
     public:
         string hash;
         string data;
-        optional<MerkleNode> leftChild;
-        optional<MerkleNode> rightChild;
+        optional<MerkleNode*> leftChild;
+        optional<MerkleNode*> rightChild;
         int nodeIndex;
 
         MerkleNode(string, string, string, int);
@@ -39,8 +41,15 @@ class MerkleNode {
 
 class SMT {
     public:
+        string rootHash;
         int treeDepth;
+        vector<MerkleNode> nodes;
+        vector<string> hashCache;
+        // Cache is store "default" node hashes
+        // Pre-compute all leaf nodes's hashes
+        vector<string> defaultCache;
 
+        SMT(int depth);
         string commit(unordered_map<int, MerkleNode> M);
         string applyOp(Operation op, int memberIndex);
         Witness memberWitnessCreate(int memberIndex);
@@ -59,6 +68,27 @@ class SMT {
             return "";
         }
 };
+
+int capacity(int depth) {
+    return (1 << (depth + 1)) - 1;
+}
+
+/// @brief 
+/// @param  
+/// @param  
+/// @param  
+/// @param  
+MerkleNode::MerkleNode(string, string, string, int) {
+
+}
+/// @brief 
+/// @param depth 
+SMT::SMT(int depth) {
+    this->treeDepth = depth;
+}
+/// @brief A hash function utilising SHA256 
+/// @param data 
+/// @return 
 string MerkleNode::hasher(const string data) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256((const unsigned char*)data.c_str(), data.size(), hash);
@@ -69,19 +99,19 @@ string MerkleNode::hasher(const string data) {
     return hashDigest.str();
 }
 
-/// @brief 
+/// @brief From a map we create a tree from the bottom-up
 /// @param M 
-/// @return 
+/// @return the root hash
 string SMT::commit(unordered_map<int, MerkleNode> M) {
-
+    return "";
 }
 
-/// @brief 
+/// @brief Applies the operation 'op' on member 'memberIndex'
 /// @param op 
 /// @param memberIndex 
 /// @return 
 string SMT::applyOp(Operation op, int memberIndex) {
-
+    return "";
 }
 
 
@@ -90,6 +120,7 @@ string SMT::applyOp(Operation op, int memberIndex) {
 /// @return 
 Witness SMT::memberWitnessCreate(int memberIndex) {
 
+    return Witness();
 }
 
 /// @brief 
@@ -98,6 +129,7 @@ Witness SMT::memberWitnessCreate(int memberIndex) {
 /// @return 
 bool SMT::memberVerify(Witness, int memberIndex) {
 
+    return true;
 }
 
 #endif

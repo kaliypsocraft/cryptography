@@ -36,9 +36,7 @@ int main() {
     
     vector<std::string> input;
     init_nodes(input);
-    MerkleTree<std::string> tree;
-    tree.initialProtocol(input);
-    tree.printTree();
+    
     //vector<MerkleProof<std::string>> proof = tree.generateMerkleProof(2);
 
 

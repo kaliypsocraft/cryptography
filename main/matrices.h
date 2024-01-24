@@ -90,7 +90,6 @@ Matrix<T>::Matrix(int rows, int columns) : rows_(rows), columns_(columns) {
         }
     }
 }
-
 /// @brief Constructs a square matrix of length n
 /// @param size 
 template <typename T>
